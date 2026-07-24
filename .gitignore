@@ -1,0 +1,14 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### Project ###
+courier-management/HELP.md
+courier-management/target/
+courier-management/.mvn/wrapper/maven-wrapper.jar
+
+delivery-tracking/HELP.md
+delivery-tracking/target/
+delivery-tracking/.mvn/wrapper/maven-wrapper.jar
