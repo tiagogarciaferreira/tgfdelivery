@@ -1,0 +1,41 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:17.10-alpine
+    restart: unless-stopped
+    shm_size: 64mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: tgfdelivery
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: 128M
+        reservations:
+          cpus: "0.10"
+          memory: 64M
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - tgfdelivery-net
+
+volumes:
+  postgres_data:
+    name: postgres_data
+    driver: local
+
+networks:
+  tgfdelivery-net:
+    driver: bridge
