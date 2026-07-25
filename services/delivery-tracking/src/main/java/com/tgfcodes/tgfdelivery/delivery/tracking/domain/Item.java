@@ -1,13 +1,13 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter(AccessLevel.PRIVATE)
+@Getter
 public class Item {
 
     @EqualsAndHashCode.Include
@@ -15,6 +15,7 @@ public class Item {
 
     private String name;
 
+    @Setter(AccessLevel.PACKAGE)
     private Integer quantity;
 
     public static Item brandNew(String name, Integer quantity) {
