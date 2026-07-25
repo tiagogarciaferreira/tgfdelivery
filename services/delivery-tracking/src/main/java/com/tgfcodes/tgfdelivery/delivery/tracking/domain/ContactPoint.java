@@ -1,8 +1,10 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
 
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor
 @EqualsAndHashCode
 public class ContactPoint {
 
