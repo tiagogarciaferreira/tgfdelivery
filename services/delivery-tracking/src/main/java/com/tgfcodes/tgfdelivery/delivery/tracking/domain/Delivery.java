@@ -142,7 +142,7 @@ public class Delivery {
     }
 
     private boolean isFilled() {
-        return isNull(this.getSender()) && isNull(this.getRecipient()) && isNull(this.getTotalCost());
+        return !isNull(this.getSender()) && !isNull(this.getRecipient()) && !isNull(this.getTotalCost());
     }
 
     private void changeStatusTo(DeliveryStatus newStatus) {

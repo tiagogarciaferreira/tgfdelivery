@@ -5,10 +5,10 @@
 *.ipr
 
 ### Project ###
-courier-management/HELP.md
-courier-management/target/
-courier-management/.mvn/wrapper/maven-wrapper.jar
+services/courier-management/HELP.md
+services/courier-management/target/**
+services/courier-management/.mvn/wrapper/maven-wrapper.jar
 
-delivery-tracking/HELP.md
-delivery-tracking/target/
-delivery-tracking/.mvn/wrapper/maven-wrapper.jar
+services/delivery-tracking/HELP.md
+services/delivery-tracking/target/**
+services/delivery-tracking/.mvn/wrapper/maven-wrapper.jar
