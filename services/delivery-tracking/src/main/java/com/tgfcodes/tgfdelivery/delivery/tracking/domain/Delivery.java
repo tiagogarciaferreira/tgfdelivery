@@ -1,5 +1,9 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
 
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.DeliveryItemNotFoundException;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.IncompleteDeliveryException;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStateException;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStatusTransitionException;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -75,7 +79,7 @@ public class Delivery {
         Item foundItem = this.getItems().stream()
                 .filter(item -> item.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow();/*TODO Create Exception */
+                .orElseThrow(() -> new DeliveryItemNotFoundException(this.getId(), itemId));
 
         foundItem.setQuantity(quantity);
         this.calculateTotalItems();
@@ -92,18 +96,19 @@ public class Delivery {
     }
 
     public void place() {
-        this.setStatus(DeliveryStatus.WAITING_FOR_COURIER);
+        verifyIfCanBePlaced();
+        this.changeStatusTo(DeliveryStatus.WAITING_FOR_COURIER);
         this.setPlacedAt(Instant.now());
     }
 
     public void pickup(UUID courierId) {
         this.setCourierId(courierId);
-        this.setStatus(DeliveryStatus.IN_TRANSIT);
+        this.changeStatusTo(DeliveryStatus.IN_TRANSIT);
         this.setAssignedAt(Instant.now());
     }
 
     public void markAsDelivered() {
-        this.setStatus(DeliveryStatus.DELIVERED);
+        this.changeStatusTo(DeliveryStatus.DELIVERED);
         this.setFulfilledAt(Instant.now());
         this.setDeliveredAt(Instant.now());
     }
@@ -123,20 +128,27 @@ public class Delivery {
 
     private void verifyIfCanBePlaced() {
         if (!isFilled()) {
-            /*TODO Create Exception */
+            throw new IncompleteDeliveryException(this.getId());
         }
         if (!getStatus().equals(DeliveryStatus.DRAFT)) {
-            /*TODO Create Exception */
+            throw new InvalidDeliveryStateException(this.getId(), this.getStatus());
         }
     }
 
     private void verifyIfCanBeEdited() {
         if (!getStatus().equals(DeliveryStatus.DRAFT)) {
-            /*TODO Create Exception */
+            throw new InvalidDeliveryStateException(this.getId(), this.getStatus());
         }
     }
 
     private boolean isFilled() {
         return isNull(this.getSender()) && isNull(this.getRecipient()) && isNull(this.getTotalCost());
+    }
+
+    private void changeStatusTo(DeliveryStatus newStatus) {
+        if (!isNull(newStatus) && this.getStatus().canNotChangeTo(newStatus)) {
+            throw new InvalidDeliveryStatusTransitionException(this.getId(), this.getStatus(), newStatus);
+        }
+        this.setStatus(newStatus);
     }
 }
