@@ -4,6 +4,7 @@ import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.DeliveryItemN
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.IncompleteDeliveryException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStateException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStatusTransitionException;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -15,41 +16,70 @@ import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
+@Entity
+@Table(name = "tb_deliveries")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter(AccessLevel.PRIVATE)
 @Getter
 public class Delivery {
 
+    @Id
     @EqualsAndHashCode.Include
     private UUID id;
 
+    @Column(name = "courier_id")
     private UUID courierId;
 
+    @Column(name = "placed_at")
     private Instant placedAt;
 
+    @Column(name = "assigned_at")
     private Instant assignedAt;
 
+    @Column(name = "delivered_at")
     private Instant deliveredAt;
 
+    @Column(name = "expected_delivery_at")
     private Instant expectedDeliveryAt;
 
+    @Column(name = "fulfilled_at")
     private Instant fulfilledAt;
 
+    @Column(name = "distance_fee")
     private BigDecimal distanceFee;
 
+    @Column(name = "courier_payout")
     private BigDecimal courierPayout;
 
+    @Column(name = "total_cost")
     private BigDecimal totalCost;
 
+    @Column(name = "total_items")
     private Integer totalItems;
 
+    @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
+    @Embedded
+    @AttributeOverride(name = "name", column = @Column(name = "sender_name"))
+    @AttributeOverride(name = "phone", column = @Column(name = "sender_phone"))
+    @AttributeOverride(name = "zipCode", column = @Column(name = "sender_zip_code"))
+    @AttributeOverride(name = "street", column = @Column(name = "sender_street"))
+    @AttributeOverride(name = "number", column = @Column(name = "sender_number"))
+    @AttributeOverride(name = "complement", column = @Column(name = "sender_complement"))
     private ContactPoint sender;
 
+    @Embedded
+    @AttributeOverride(name = "name", column = @Column(name = "recipient_name"))
+    @AttributeOverride(name = "phone", column = @Column(name = "recipient_phone"))
+    @AttributeOverride(name = "zipCode", column = @Column(name = "recipient_zip_code"))
+    @AttributeOverride(name = "street", column = @Column(name = "recipient_street"))
+    @AttributeOverride(name = "number", column = @Column(name = "recipient_number"))
+    @AttributeOverride(name = "complement", column = @Column(name = "recipient_complement"))
     private ContactPoint recipient;
 
+    @OneToMany(mappedBy = "delivery", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
 
     public static Delivery draft() {
@@ -64,7 +94,7 @@ public class Delivery {
     }
 
     public UUID addItem(String name, int quantity) {
-        Item item = Item.brandNew(name, quantity);
+        Item item = Item.brandNew(name, quantity, this);
         this.items.add(item);
         this.calculateTotalItems();
         return item.getId();

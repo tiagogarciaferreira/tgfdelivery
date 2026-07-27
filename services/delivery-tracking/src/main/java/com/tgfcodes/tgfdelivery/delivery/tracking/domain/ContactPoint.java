@@ -1,11 +1,12 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
+@Embeddable
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @EqualsAndHashCode
 @Getter
 public class ContactPoint {

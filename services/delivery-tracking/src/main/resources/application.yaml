@@ -1,3 +1,15 @@
 spring:
   application:
     name: delivery-tracking
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/deliverydb
+    username: postgres
+    password: postgres
