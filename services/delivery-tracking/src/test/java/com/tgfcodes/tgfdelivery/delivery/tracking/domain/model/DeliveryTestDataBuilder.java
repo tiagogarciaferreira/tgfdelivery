@@ -1,4 +1,8 @@
-package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
+package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
+
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.ContactPoint;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.Delivery;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.PreparationDetails;
 
 import java.math.BigDecimal;
 import java.time.Duration;

@@ -1,4 +1,4 @@
-package com.tgfcodes.tgfdelivery.delivery.tracking.domain.respository;
+package com.tgfcodes.tgfdelivery.delivery.tracking.domain.repository;
 
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.Delivery;
 import org.springframework.data.jpa.repository.JpaRepository;
