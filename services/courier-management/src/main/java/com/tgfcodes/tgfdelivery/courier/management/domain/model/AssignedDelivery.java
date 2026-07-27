@@ -1,4 +1,4 @@
-package com.tgfcodes.tgfdelivery.courier.management.domain;
+package com.tgfcodes.tgfdelivery.courier.management.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;

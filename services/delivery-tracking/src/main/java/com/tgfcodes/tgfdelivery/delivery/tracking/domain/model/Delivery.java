@@ -1,4 +1,4 @@
-package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
+package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
 
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.DeliveryItemNotFoundException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.IncompleteDeliveryException;

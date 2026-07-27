@@ -1,8 +1,5 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
 
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.Delivery;
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.DeliveryStatus;
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.Item;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.DeliveryItemNotFoundException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.IncompleteDeliveryException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStateException;

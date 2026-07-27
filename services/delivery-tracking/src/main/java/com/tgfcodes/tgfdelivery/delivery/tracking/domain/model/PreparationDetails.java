@@ -1,4 +1,4 @@
-package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
+package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +19,6 @@ public class PreparationDetails {
     private BigDecimal distanceFee;
 
     private BigDecimal courierPayout;
-    
+
     private Duration expectedDeliveryTime;
 }

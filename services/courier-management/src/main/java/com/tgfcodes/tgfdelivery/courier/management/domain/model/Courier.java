@@ -1,4 +1,4 @@
-package com.tgfcodes.tgfdelivery.courier.management.domain;
+package com.tgfcodes.tgfdelivery.courier.management.domain.model;
 
 import com.tgfcodes.tgfdelivery.courier.management.domain.exception.AssignedDeliveryNotFoundException;
 import jakarta.persistence.*;

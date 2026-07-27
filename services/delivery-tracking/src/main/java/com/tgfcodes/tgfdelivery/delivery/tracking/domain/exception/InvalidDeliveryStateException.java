@@ -1,6 +1,6 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception;
 
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.DeliveryStatus;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.DeliveryStatus;
 
 import java.util.UUID;
 

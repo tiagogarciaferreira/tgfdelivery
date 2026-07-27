@@ -1,6 +1,6 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain.repository;
 
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.Delivery;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.Delivery;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.DeliveryTestDataBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

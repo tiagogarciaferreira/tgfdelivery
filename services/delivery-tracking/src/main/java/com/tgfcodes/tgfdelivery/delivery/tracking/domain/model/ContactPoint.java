@@ -1,4 +1,4 @@
-package com.tgfcodes.tgfdelivery.delivery.tracking.domain;
+package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
 
 
 import jakarta.persistence.Embeddable;
