@@ -1,6 +1,7 @@
 package com.tgfcodes.tgfdelivery.courier.management.domain;
 
 import com.tgfcodes.tgfdelivery.courier.management.domain.exception.AssignedDeliveryNotFoundException;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
@@ -9,12 +10,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "tb_couriers")
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(AccessLevel.PRIVATE)
 public class Courier {
 
+    @Id
     @EqualsAndHashCode.Include
     private UUID id;
 
@@ -24,12 +28,16 @@ public class Courier {
     @Setter(AccessLevel.PUBLIC)
     private String phone;
 
+    @Column(name = "ful_filled_delivery_quantity")
     private Integer fulFilledDeliveryQuantity;
 
+    @Column(name = "pending_delivery_quantity")
     private Integer pendingDeliveryQuantity;
 
+    @Column(name = "last_ful_filled_delivery_at")
     private Instant lastFulFilledDeliveryAt;
 
+    @OneToMany(mappedBy = "courier", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<AssignedDelivery> pendingDeliveries = new ArrayList<>();
 
     public List<AssignedDelivery> getPendingDeliveries() {
@@ -47,7 +55,7 @@ public class Courier {
     }
 
     public void assign(UUID deliveryId) {
-        this.pendingDeliveries.add(AssignedDelivery.pending(deliveryId));
+        this.pendingDeliveries.add(AssignedDelivery.pending(deliveryId, this));
         this.pendingDeliveryQuantity++;
     }
 

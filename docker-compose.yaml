@@ -7,7 +7,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: deliverydb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
@@ -31,9 +30,37 @@ services:
     networks:
       - tgfdelivery-net
 
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:9.5
+    restart: unless-stopped
+    shm_size: 64mb
+    depends_on:
+      - postgres
+    ports:
+      - "8083:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dba@tgfdelivery.com
+      PGADMIN_DEFAULT_PASSWORD: tgfdelivery
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    deploy:
+      resources:
+        limits:
+          cpus: "0.30"
+          memory: 128M
+        reservations:
+          cpus: "0.10"
+          memory: 64M
+    networks:
+      - tgfdelivery-net
+
 volumes:
   postgres_data:
     name: postgres_data
+    driver: local
+  pgadmin_data:
+    name: pgadmin_data
     driver: local
 
 networks:

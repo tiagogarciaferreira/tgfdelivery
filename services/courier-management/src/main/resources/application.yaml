@@ -1,3 +1,18 @@
 spring:
   application:
     name: courier-management
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/courierdb
+    username: postgres
+    password: postgres
+
+server:
+  port: 8080
