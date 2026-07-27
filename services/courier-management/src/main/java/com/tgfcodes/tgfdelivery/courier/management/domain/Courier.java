@@ -1,5 +1,6 @@
 package com.tgfcodes.tgfdelivery.courier.management.domain;
 
+import com.tgfcodes.tgfdelivery.courier.management.domain.exception.AssignedDeliveryNotFoundException;
 import lombok.*;
 
 import java.time.Instant;
@@ -17,8 +18,10 @@ public class Courier {
     @EqualsAndHashCode.Include
     private UUID id;
 
+    @Setter(AccessLevel.PUBLIC)
     private String name;
 
+    @Setter(AccessLevel.PUBLIC)
     private String phone;
 
     private Integer fulFilledDeliveryQuantity;
@@ -43,4 +46,19 @@ public class Courier {
         return courier;
     }
 
+    public void assign(UUID deliveryId) {
+        this.pendingDeliveries.add(AssignedDelivery.pending(deliveryId));
+        this.pendingDeliveryQuantity++;
+    }
+
+    public void fulFilled(UUID deliveryId) {
+        boolean removed = this.pendingDeliveries.removeIf(delivery -> delivery.getId().equals(deliveryId));
+        if (!removed) {
+            throw new AssignedDeliveryNotFoundException(deliveryId);
+        }
+
+        this.pendingDeliveryQuantity--;
+        this.fulFilledDeliveryQuantity++;
+        this.lastFulFilledDeliveryAt = Instant.now();
+    }
 }
