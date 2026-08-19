@@ -13,6 +13,14 @@ spring:
     url: jdbc:postgresql://localhost:5432/deliverydb
     username: postgres
     password: postgres
-
+  mvc:
+    apiversion:
+      required: true
+      detect-supported: true
+      default: 1
+      supported:
+        - 1
+      use:
+        path-segment: 0
 server:
   port: 8081
