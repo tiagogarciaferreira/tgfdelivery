@@ -8,6 +8,10 @@ import com.tgfcodes.tgfdelivery.delivery.tracking.domain.service.DeliveryQuerySe
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +35,6 @@ public class DeliveryController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DeliveryOutput> draft(@RequestBody @Valid DeliveryInput deliveryInput) {
-
         log.debug("Creating delivery with input: {}", deliveryInput);
 
         Delivery delivery = deliveryCommandService.draft(deliveryInput);
@@ -48,7 +51,6 @@ public class DeliveryController {
 
     @PutMapping(value = "/{deliveryId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DeliveryOutput> edit(@PathVariable UUID deliveryId, @RequestBody @Valid DeliveryInput deliveryInput) {
-
         log.debug("Editing delivery with ID: {} and input: {}", deliveryId, deliveryInput);
 
         Delivery delivery = deliveryCommandService.edit(deliveryId, deliveryInput);
@@ -60,7 +62,6 @@ public class DeliveryController {
 
     @GetMapping(value = "/{deliveryId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DeliveryOutput> get(@PathVariable UUID deliveryId) {
-
         log.debug("Retrieving delivery with ID: {}", deliveryId);
 
         Delivery delivery = deliveryQueryService.findById(deliveryId);
@@ -68,5 +69,16 @@ public class DeliveryController {
 
         log.info("Delivery retrieved with ID: {}", deliveryOutput.id());
         return ResponseEntity.ok(deliveryOutput);
+    }
+
+    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PagedModel<DeliveryOutput>> search(@PageableDefault Pageable pageable) {
+        log.debug("Searching deliveries with pageable: {}", pageable);
+
+        Page<Delivery> searchedPage = deliveryQueryService.search(pageable);
+        PagedModel<DeliveryOutput> pagedModel = new PagedModel<>(searchedPage.map(DeliveryOutput::toResponse));
+
+        log.info("Deliveries retrieved with pageable: {}", pageable);
+        return ResponseEntity.ok(pagedModel);
     }
 }

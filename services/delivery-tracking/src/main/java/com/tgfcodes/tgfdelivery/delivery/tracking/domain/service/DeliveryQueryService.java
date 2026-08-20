@@ -5,6 +5,8 @@ import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.Delivery;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,5 +22,9 @@ public class DeliveryQueryService {
 
     public Delivery findById(UUID deliveryId) {
         return deliveryRepository.findById(deliveryId).orElseThrow(() -> new DeliveryNotFoundException(deliveryId));
+    }
+
+    public Page<Delivery> search(Pageable pageable) {
+        return deliveryRepository.findAll(pageable);
     }
 }
