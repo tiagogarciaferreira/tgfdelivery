@@ -13,7 +13,7 @@ public record ItemOutput(
         Integer quantity
 ) {
 
-    public static ItemOutput toResponse(Item item) {
+    public static ItemOutput toOutput(Item item) {
         Objects.requireNonNull(item, "Item cannot be null");
         return new ItemOutput(item.getId(), item.getName(), item.getQuantity());
     }

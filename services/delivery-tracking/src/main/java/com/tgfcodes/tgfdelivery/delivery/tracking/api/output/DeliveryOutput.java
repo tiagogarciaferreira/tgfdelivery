@@ -42,7 +42,7 @@ public record DeliveryOutput(
 
         List<ItemOutput> items
 ) {
-    public static DeliveryOutput toResponse(Delivery delivery) {
+    public static DeliveryOutput toOutput(Delivery delivery) {
         Objects.requireNonNull(delivery, "Delivery cannot be null");
 
         List<Item> validItems = isNull(delivery.getItems()) ? List.of() : delivery.getItems();
@@ -59,9 +59,9 @@ public record DeliveryOutput(
                 delivery.getCourierPayout(),
                 delivery.getTotalCost(),
                 delivery.getTotalItems(),
-                ContactPointOutput.toResponse(delivery.getSender()),
-                ContactPointOutput.toResponse(delivery.getRecipient()),
-                validItems.stream().map(ItemOutput::toResponse).toList()
+                ContactPointOutput.toOutput(delivery.getSender()),
+                ContactPointOutput.toOutput(delivery.getRecipient()),
+                validItems.stream().map(ItemOutput::toOutput).toList()
         );
     }
 }

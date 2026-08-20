@@ -38,11 +38,11 @@ public class DeliveryController {
     private final DeliveryCheckpointService deliveryCheckpointService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeliveryOutput> draft(@RequestBody @Valid DeliveryInput deliveryInput) {
+    public ResponseEntity<DeliveryOutput> draft(@Valid @RequestBody DeliveryInput deliveryInput) {
         log.debug("Creating delivery with input: {}", deliveryInput);
 
         Delivery delivery = deliveryCommandService.draft(deliveryInput);
-        DeliveryOutput deliveryOutput = DeliveryOutput.toResponse(delivery);
+        DeliveryOutput deliveryOutput = DeliveryOutput.toOutput(delivery);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{deliveryId}")
@@ -58,7 +58,7 @@ public class DeliveryController {
         log.debug("Editing delivery with ID: {} and input: {}", deliveryId, deliveryInput);
 
         Delivery delivery = deliveryCommandService.edit(deliveryId, deliveryInput);
-        DeliveryOutput deliveryOutput = DeliveryOutput.toResponse(delivery);
+        DeliveryOutput deliveryOutput = DeliveryOutput.toOutput(delivery);
 
         log.info("Delivery edited with ID: {}", deliveryOutput.id());
         return ResponseEntity.ok().body(deliveryOutput);
@@ -69,7 +69,7 @@ public class DeliveryController {
         log.debug("Retrieving delivery with ID: {}", deliveryId);
 
         Delivery delivery = deliveryQueryService.findById(deliveryId);
-        DeliveryOutput deliveryOutput = DeliveryOutput.toResponse(delivery);
+        DeliveryOutput deliveryOutput = DeliveryOutput.toOutput(delivery);
 
         log.info("Delivery retrieved with ID: {}", deliveryOutput.id());
         return ResponseEntity.ok(deliveryOutput);
@@ -80,7 +80,7 @@ public class DeliveryController {
         log.debug("Searching deliveries with pageable: {}", pageable);
 
         Page<Delivery> searchedPage = deliveryQueryService.search(pageable);
-        PagedModel<DeliveryOutput> pagedModel = new PagedModel<>(searchedPage.map(DeliveryOutput::toResponse));
+        PagedModel<DeliveryOutput> pagedModel = new PagedModel<>(searchedPage.map(DeliveryOutput::toOutput));
 
         log.info("Deliveries retrieved with pageable: {}", pageable);
         return ResponseEntity.ok(pagedModel);

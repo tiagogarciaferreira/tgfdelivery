@@ -17,7 +17,7 @@ public record ContactPointOutput(
 
         String complement
 ) {
-    public static ContactPointOutput toResponse(ContactPoint contactPoint) {
+    public static ContactPointOutput toOutput(ContactPoint contactPoint) {
         Objects.requireNonNull(contactPoint, "ContactPoint cannot be null");
         return new ContactPointOutput(
                 contactPoint.getName(),
