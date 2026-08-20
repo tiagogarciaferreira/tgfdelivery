@@ -13,6 +13,22 @@ spring:
     url: jdbc:postgresql://localhost:5432/courierdb
     username: postgres
     password: postgres
-
+  mvc:
+    apiversion:
+      required: true
+      detect-supported: true
+      supported:
+        - 1
+      use:
+        path-segment: 1
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: true
+    datatype:
+      datetime:
+        write-date-keys-as-timestamps: false
 server:
   port: 8080
