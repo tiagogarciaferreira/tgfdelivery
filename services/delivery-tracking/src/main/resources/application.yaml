@@ -17,10 +17,19 @@ spring:
     apiversion:
       required: true
       detect-supported: true
-      default: 1
       supported:
         - 1
       use:
-        path-segment: 0
+        path-segment: 1
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: true
+    datatype:
+      datetime:
+        write-date-keys-as-timestamps: false
+
 server:
   port: 8081
