@@ -1,9 +1,12 @@
 package com.tgfcodes.tgfdelivery.courier.management.api.controller;
 
 import com.tgfcodes.tgfdelivery.courier.management.api.input.CourierInput;
+import com.tgfcodes.tgfdelivery.courier.management.api.input.CourierPayoutCalculationInput;
 import com.tgfcodes.tgfdelivery.courier.management.api.output.CourierOutput;
+import com.tgfcodes.tgfdelivery.courier.management.api.output.CourierPayoutResultOutput;
 import com.tgfcodes.tgfdelivery.courier.management.domain.model.Courier;
 import com.tgfcodes.tgfdelivery.courier.management.domain.service.CourierCommandService;
+import com.tgfcodes.tgfdelivery.courier.management.domain.service.CourierPayoutService;
 import com.tgfcodes.tgfdelivery.courier.management.domain.service.CourierQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.UUID;
 
@@ -32,6 +36,8 @@ public class CourierController {
     private final CourierCommandService courierCommandService;
 
     private final CourierQueryService courierQueryService;
+
+    private final CourierPayoutService courierPayoutService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CourierOutput> create(@Valid @RequestBody CourierInput courierInput) {
@@ -80,5 +86,15 @@ public class CourierController {
 
         log.info("Couriers retrieved with pageable: {}", pageable);
         return ResponseEntity.ok(pagedModel);
+    }
+
+    @PostMapping(value = "/payout-calculation", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CourierPayoutResultOutput> calculate(@Valid @RequestBody CourierPayoutCalculationInput payoutCalculationInput) {
+        log.debug("Calculating payout for courier with input: {}", payoutCalculationInput);
+
+        BigDecimal payoutFee = courierPayoutService.calculate(payoutCalculationInput);
+
+        log.info("Payout calculated for courier with fee: {}", payoutFee);
+        return ResponseEntity.ok(new CourierPayoutResultOutput(payoutFee));
     }
 }
