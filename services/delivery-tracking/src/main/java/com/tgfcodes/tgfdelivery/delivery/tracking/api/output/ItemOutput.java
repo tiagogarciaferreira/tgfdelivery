@@ -5,7 +5,7 @@ import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.Item;
 import java.util.Objects;
 import java.util.UUID;
 
-public record ItemResponse(
+public record ItemOutput(
         UUID id,
 
         String name,
@@ -13,8 +13,8 @@ public record ItemResponse(
         Integer quantity
 ) {
 
-    public static ItemResponse toResponse(Item item) {
+    public static ItemOutput toResponse(Item item) {
         Objects.requireNonNull(item, "Item cannot be null");
-        return new ItemResponse(item.getId(), item.getName(), item.getQuantity());
+        return new ItemOutput(item.getId(), item.getName(), item.getQuantity());
     }
 }

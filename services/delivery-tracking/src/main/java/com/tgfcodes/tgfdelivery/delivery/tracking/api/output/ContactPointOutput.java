@@ -4,7 +4,7 @@ import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.ContactPoint;
 
 import java.util.Objects;
 
-public record ContactPointResponse(
+public record ContactPointOutput(
         String name,
 
         String phone,
@@ -17,9 +17,9 @@ public record ContactPointResponse(
 
         String complement
 ) {
-    public static ContactPointResponse toResponse(ContactPoint contactPoint) {
+    public static ContactPointOutput toResponse(ContactPoint contactPoint) {
         Objects.requireNonNull(contactPoint, "ContactPoint cannot be null");
-        return new ContactPointResponse(
+        return new ContactPointOutput(
                 contactPoint.getName(),
                 contactPoint.getPhone(),
                 contactPoint.getZipCode(),

@@ -1,7 +1,7 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.api.controller;
 
 import com.tgfcodes.tgfdelivery.delivery.tracking.api.input.DeliveryInput;
-import com.tgfcodes.tgfdelivery.delivery.tracking.api.output.DeliveryResponse;
+import com.tgfcodes.tgfdelivery.delivery.tracking.api.output.DeliveryOutput;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.Delivery;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.service.DeliveryCommandService;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.service.DeliveryQueryService;
@@ -30,35 +30,43 @@ public class DeliveryController {
     private final DeliveryQueryService deliveryQueryService;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeliveryResponse> draft(@RequestBody @Valid DeliveryInput deliveryInput) {
+    public ResponseEntity<DeliveryOutput> draft(@RequestBody @Valid DeliveryInput deliveryInput) {
+
+        log.debug("Creating delivery with input: {}", deliveryInput);
 
         Delivery delivery = deliveryCommandService.draft(deliveryInput);
-        DeliveryResponse deliveryResponse = DeliveryResponse.toResponse(delivery);
+        DeliveryOutput deliveryOutput = DeliveryOutput.toResponse(delivery);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{deliveryId}")
-                .buildAndExpand(deliveryResponse.id())
+                .buildAndExpand(deliveryOutput.id())
                 .toUri();
 
-        log.info("Delivery created with ID: {}", deliveryResponse.id());
-        return ResponseEntity.created(location).body(deliveryResponse);
+        log.info("Delivery created with ID: {}", deliveryOutput.id());
+        return ResponseEntity.created(location).body(deliveryOutput);
     }
 
     @PutMapping(value = "/{deliveryId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeliveryResponse> edit(@PathVariable UUID deliveryId, @RequestBody @Valid DeliveryInput deliveryInput) {
-        Delivery delivery = deliveryCommandService.edit(deliveryId, deliveryInput);
-        DeliveryResponse deliveryResponse = DeliveryResponse.toResponse(delivery);
+    public ResponseEntity<DeliveryOutput> edit(@PathVariable UUID deliveryId, @RequestBody @Valid DeliveryInput deliveryInput) {
 
-        log.info("Delivery edited with ID: {}", deliveryResponse.id());
-        return ResponseEntity.ok().body(deliveryResponse);
+        log.debug("Editing delivery with ID: {} and input: {}", deliveryId, deliveryInput);
+
+        Delivery delivery = deliveryCommandService.edit(deliveryId, deliveryInput);
+        DeliveryOutput deliveryOutput = DeliveryOutput.toResponse(delivery);
+
+        log.info("Delivery edited with ID: {}", deliveryOutput.id());
+        return ResponseEntity.ok().body(deliveryOutput);
     }
 
     @GetMapping(value = "/{deliveryId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeliveryResponse> get(@PathVariable UUID deliveryId) {
-        Delivery delivery = deliveryQueryService.findById(deliveryId);
-        DeliveryResponse deliveryResponse = DeliveryResponse.toResponse(delivery);
+    public ResponseEntity<DeliveryOutput> get(@PathVariable UUID deliveryId) {
 
-        log.info("Delivery retrieved with ID: {}", deliveryResponse.id());
-        return ResponseEntity.ok(deliveryResponse);
+        log.debug("Retrieving delivery with ID: {}", deliveryId);
+
+        Delivery delivery = deliveryQueryService.findById(deliveryId);
+        DeliveryOutput deliveryOutput = DeliveryOutput.toResponse(delivery);
+
+        log.info("Delivery retrieved with ID: {}", deliveryOutput.id());
+        return ResponseEntity.ok(deliveryOutput);
     }
 }

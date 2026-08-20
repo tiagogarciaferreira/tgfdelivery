@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
-public record DeliveryResponse(
+public record DeliveryOutput(
         UUID id,
 
         UUID courierId,
@@ -36,17 +36,17 @@ public record DeliveryResponse(
 
         Integer totalItems,
 
-        ContactPointResponse sender,
+        ContactPointOutput sender,
 
-        ContactPointResponse recipient,
+        ContactPointOutput recipient,
 
-        List<ItemResponse> items
+        List<ItemOutput> items
 ) {
-    public static DeliveryResponse toResponse(Delivery delivery) {
+    public static DeliveryOutput toResponse(Delivery delivery) {
         Objects.requireNonNull(delivery, "Delivery cannot be null");
 
         List<Item> validItems = isNull(delivery.getItems()) ? List.of() : delivery.getItems();
-        return new DeliveryResponse(
+        return new DeliveryOutput(
                 delivery.getId(),
                 delivery.getCourierId(),
                 delivery.getStatus().name(),
@@ -59,9 +59,9 @@ public record DeliveryResponse(
                 delivery.getCourierPayout(),
                 delivery.getTotalCost(),
                 delivery.getTotalItems(),
-                ContactPointResponse.toResponse(delivery.getSender()),
-                ContactPointResponse.toResponse(delivery.getRecipient()),
-                validItems.stream().map(ItemResponse::toResponse).toList()
+                ContactPointOutput.toResponse(delivery.getSender()),
+                ContactPointOutput.toResponse(delivery.getRecipient()),
+                validItems.stream().map(ItemOutput::toResponse).toList()
         );
     }
 }
