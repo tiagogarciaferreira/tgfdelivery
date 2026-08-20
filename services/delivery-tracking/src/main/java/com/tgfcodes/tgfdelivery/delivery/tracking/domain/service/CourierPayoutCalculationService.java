@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 
 public interface CourierPayoutCalculationService {
 
-    BigDecimal calculatePayout(double distanceInKm);
+    BigDecimal calculatePayout(Double distanceInKm);
 }
