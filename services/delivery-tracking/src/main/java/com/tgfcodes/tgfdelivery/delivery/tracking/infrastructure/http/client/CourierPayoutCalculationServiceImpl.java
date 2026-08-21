@@ -4,6 +4,8 @@ import com.tgfcodes.tgfdelivery.delivery.tracking.domain.service.CourierPayoutCa
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.math.BigDecimal;
 
@@ -16,8 +18,15 @@ public class CourierPayoutCalculationServiceImpl implements CourierPayoutCalcula
 
     @Override
     public BigDecimal calculatePayout(Double distanceInKm) {
-        CourierPayoutCalculationInput courierPayoutCalculationInput = new CourierPayoutCalculationInput(distanceInKm);
-        CourierPayoutResultOutput payoutResultOutput = courierAPIClient.payoutCalculation(courierPayoutCalculationInput);
-        return payoutResultOutput.payoutFee();
+        try {
+            CourierPayoutCalculationInput courierPayoutCalculationInput = new CourierPayoutCalculationInput(distanceInKm);
+            CourierPayoutResultOutput payoutResultOutput = courierAPIClient.payoutCalculation(courierPayoutCalculationInput);
+            return payoutResultOutput.payoutFee();
+
+        } catch (ResourceAccessException ex) {
+            throw new GatewayTimeoutException(ex);
+        } catch (HttpServerErrorException | IllegalArgumentException ex) {
+            throw new BadGatewayException(ex);
+        }
     }
 }
