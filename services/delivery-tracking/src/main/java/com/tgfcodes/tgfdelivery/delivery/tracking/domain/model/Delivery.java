@@ -1,11 +1,15 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
 
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryFulFilledEvent;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPickUpEvent;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPlacedEvent;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.DeliveryItemNotFoundException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.IncompleteDeliveryException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStateException;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.InvalidDeliveryStatusTransitionException;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -19,10 +23,10 @@ import static java.util.Objects.isNull;
 @Entity
 @Table(name = "tb_deliveries")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Setter(AccessLevel.PRIVATE)
 @Getter
-public class Delivery {
+public class Delivery extends AbstractAggregateRoot<Delivery> {
 
     @Id
     @EqualsAndHashCode.Include
@@ -129,18 +133,21 @@ public class Delivery {
         verifyIfCanBePlaced();
         this.changeStatusTo(DeliveryStatus.WAITING_FOR_COURIER);
         this.setPlacedAt(Instant.now());
+        super.registerEvent(new DeliveryPlacedEvent(this.getId(), this.getPlacedAt()));
     }
 
     public void pickup(UUID courierId) {
         this.setCourierId(courierId);
         this.changeStatusTo(DeliveryStatus.IN_TRANSIT);
         this.setAssignedAt(Instant.now());
+        super.registerEvent(new DeliveryPickUpEvent(this.getId(), this.getAssignedAt()));
     }
 
     public void markAsDelivered() {
         this.changeStatusTo(DeliveryStatus.DELIVERED);
         this.setFulfilledAt(Instant.now());
         this.setDeliveredAt(Instant.now());
+        super.registerEvent(new DeliveryFulFilledEvent(this.getId(), this.getFulfilledAt()));
     }
 
     public void clearItems() {
