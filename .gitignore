@@ -13,6 +13,10 @@ services/delivery-tracking/HELP.md
 services/delivery-tracking/target/**
 services/delivery-tracking/.mvn/wrapper/maven-wrapper.jar
 
+services/gateway/HELP.md
+services/gateway/target/**
+services/gateway/.mvn/wrapper/maven-wrapper.jar
+
 services/service-registry/HELP.md
 services/service-registry/target/**
 services/service-registry/.mvn/wrapper/maven-wrapper.jar

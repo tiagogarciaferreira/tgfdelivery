@@ -1,15 +1,23 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.infrastructure.http.client;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class CourierAPIClientConfig {
-    
+
+    @Bean
+    @Primary
+    public RestClient.Builder restClientBuilder() {
+        return RestClient.builder();
+    }
+
     @Bean
     @LoadBalanced
     public RestClient.Builder restClientBuilderWithLoadBalancer() {
@@ -17,7 +25,7 @@ public class CourierAPIClientConfig {
     }
 
     @Bean
-    public CourierAPIClient courierAPIClient(RestClient.Builder builder) {
+    public CourierAPIClient courierAPIClient(@Qualifier("restClientBuilderWithLoadBalancer") RestClient.Builder builder) {
         RestClient restClient = builder.baseUrl("http://courier-management").build();
         RestClientAdapter restClientAdapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory.builderFor(restClientAdapter).build();
