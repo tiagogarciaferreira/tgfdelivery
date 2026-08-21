@@ -1,6 +1,6 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.infrastructure.event;
 
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryFulFilledEvent;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryFulfilledEvent;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPickUpEvent;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPlacedEvent;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class DeliveryDomainEventHandler {
     }
 
     @EventListener
-    public void handle(DeliveryFulFilledEvent event) {
+    public void handle(DeliveryFulfilledEvent event) {
         integrationEventPublisher.publish(event, event.deliveryId().toString(), DELIVERIES_V_1_EVENTS);
     }
 }

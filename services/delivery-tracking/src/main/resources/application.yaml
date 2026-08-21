@@ -31,11 +31,14 @@ spring:
       datetime:
         write-date-keys-as-timestamps: false
   kafka:
-    bootstrap-servers:
-      - localhost:9092
     producer:
+      bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+      properties:
+        spring.json.type.mapping:
+          delivery-placed-event:com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPlacedEvent,
+          delivery-picked-up-event:com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPickUpEvent,
+          delivery-fulfilled-event:com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryFulfilledEvent
 server:
   port: 8081

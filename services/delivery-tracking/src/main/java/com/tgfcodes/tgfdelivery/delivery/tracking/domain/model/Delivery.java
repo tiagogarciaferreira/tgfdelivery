@@ -1,6 +1,6 @@
 package com.tgfcodes.tgfdelivery.delivery.tracking.domain.model;
 
-import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryFulFilledEvent;
+import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryFulfilledEvent;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPickUpEvent;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.event.DeliveryPlacedEvent;
 import com.tgfcodes.tgfdelivery.delivery.tracking.domain.exception.DeliveryItemNotFoundException;
@@ -147,7 +147,7 @@ public class Delivery extends AbstractAggregateRoot<Delivery> {
         this.changeStatusTo(DeliveryStatus.DELIVERED);
         this.setFulfilledAt(Instant.now());
         this.setDeliveredAt(Instant.now());
-        super.registerEvent(new DeliveryFulFilledEvent(this.getId(), this.getFulfilledAt()));
+        super.registerEvent(new DeliveryFulfilledEvent(this.getId(), this.getFulfilledAt()));
     }
 
     public void clearItems() {
