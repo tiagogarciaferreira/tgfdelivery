@@ -43,6 +43,13 @@ spring:
           delivery-placed-event:com.tgfcodes.tgfdelivery.courier.management.infrastructure.event.DeliveryPlacedIntegrationEvent,
           delivery-picked-up-event:com.fasterxml.jackson.databind.JsonNode,
           delivery-fulfilled-event:com.tgfcodes.tgfdelivery.courier.management.infrastructure.event.DeliveryFulFilledIntegrationEvent
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    instance-id: ${random.value}
+    prefer-ip-address: true
 
 server:
   port: 8080
