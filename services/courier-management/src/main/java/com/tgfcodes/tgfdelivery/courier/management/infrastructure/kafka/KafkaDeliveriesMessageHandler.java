@@ -1,5 +1,6 @@
 package com.tgfcodes.tgfdelivery.courier.management.infrastructure.kafka;
 
+import com.tgfcodes.tgfdelivery.courier.management.domain.service.CourierDeliveryService;
 import com.tgfcodes.tgfdelivery.courier.management.infrastructure.event.DeliveryFulFilledIntegrationEvent;
 import com.tgfcodes.tgfdelivery.courier.management.infrastructure.event.DeliveryPlacedIntegrationEvent;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +16,22 @@ import org.springframework.stereotype.Component;
 @KafkaListener(topics = "deliveries.v1.events", groupId = "courier-management")
 public class KafkaDeliveriesMessageHandler {
 
+    private final CourierDeliveryService courierDeliveryService;
+
     @KafkaHandler(isDefault = true)
     public void defaultHandler(@Payload Object payload) {
         log.info("Default handler received message: {}", payload);
     }
 
-
     @KafkaHandler
     public void handle(@Payload DeliveryPlacedIntegrationEvent event) {
         log.info("Received delivery placed event: {}", event);
+        courierDeliveryService.assign(event.deliveryId());
     }
 
     @KafkaHandler
     public void handle(@Payload DeliveryFulFilledIntegrationEvent event) {
         log.info("Received delivery fulfilled event: {}", event);
+        courierDeliveryService.fulfill(event.deliveryId());
     }
 }
