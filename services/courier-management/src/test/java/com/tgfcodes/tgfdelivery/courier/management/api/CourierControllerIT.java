@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,6 +68,32 @@ class CourierControllerIT {
                     .extracting(CourierOutput::name, CourierOutput::phone)
                     .containsExactly(expectedCourier.getName(), expectedCourier.getPhone());
         }
+
+        @Test
+        void givenInvalidName_whenCreatingCourier_shouldReturnBadRequest() {
+            var invalidCourierInput = CourierTestDataBuilder.invalidCourierInputBlankName();
+            given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .body(invalidCourierInput)
+                    .when()
+                    .post()
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
+
+        @Test
+        void givenInvalidPhone_whenCreatingCourier_shouldReturnBadRequest() {
+            var invalidCourierInput = CourierTestDataBuilder.invalidCourierInputBlankPhone();
+            given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .body(invalidCourierInput)
+                    .when()
+                    .post()
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
     }
 
     @Nested
@@ -95,6 +122,36 @@ class CourierControllerIT {
                             courierOutput -> assertThat(courierOutput.name()).isEqualTo(courierInput.name())
                     );
         }
+
+        @Test
+        void givenNonExistentCourierId_whenUpdatingCourier_shouldReturnNotFound() {
+            var nonExistentCourierId = UUID.randomUUID();
+            var courierInput = CourierTestDataBuilder.validCourierInput();
+
+            given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .pathParam("courierId", nonExistentCourierId)
+                    .body(courierInput)
+                    .when()
+                    .put("/{courierId}")
+                    .then()
+                    .statusCode(HttpStatus.NOT_FOUND.value());
+        }
+
+        @Test
+        void givenInvalidInput_whenUpdatingCourier_shouldReturnBadRequest() {
+            var invalidCourierInput = CourierTestDataBuilder.invalidCourierInputBlankName();
+            given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .pathParam("courierId", defaultCourier.getId())
+                    .body(invalidCourierInput)
+                    .when()
+                    .put("/{courierId}")
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
     }
 
     @Nested
@@ -119,6 +176,19 @@ class CourierControllerIT {
                             courierOutput -> assertThat(courierOutput.id()).isEqualTo(defaultCourier.getId()),
                             courierOutput -> assertThat(courierOutput.name()).isEqualTo(defaultCourier.getName())
                     );
+        }
+
+        @Test
+        void givenNonExistentCourierId_whenGettingCourier_shouldReturnNotFound() {
+            var nonExistentCourierId = UUID.randomUUID();
+            given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .pathParam("courierId", nonExistentCourierId)
+                    .when()
+                    .get("/{courierId}")
+                    .then()
+                    .statusCode(HttpStatus.NOT_FOUND.value());
         }
     }
 
@@ -165,6 +235,19 @@ class CourierControllerIT {
                     .isNotNull()
                     .extracting(CourierPayoutResultOutput::payoutFee)
                     .isEqualTo(expectedFee);
+        }
+
+        @Test
+        void givenInvalidDistance_whenCalculatingPayout_shouldReturnBadRequest() {
+            var invalidPayoutInput = CourierTestDataBuilder.invalidPayoutInput();
+            given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .body(invalidPayoutInput)
+                    .when()
+                    .post("/payout-calculation")
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
         }
     }
 }
