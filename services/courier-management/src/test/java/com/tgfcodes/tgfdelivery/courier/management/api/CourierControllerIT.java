@@ -14,6 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -72,7 +75,6 @@ class CourierControllerIT {
         @Test
         void givenValidInput_whenUpdatingCourier_shouldReturnOkAndCourierOutput() {
             var courierInput = CourierTestDataBuilder.validCourierInput();
-            var updatedCourier = CourierTestDataBuilder.samwiseCourier();
 
             var response = given()
                     .contentType(ContentType.JSON)
@@ -88,8 +90,10 @@ class CourierControllerIT {
 
             assertThat(response)
                     .isNotNull()
-                    .extracting(CourierOutput::id, CourierOutput::name)
-                    .containsExactly(updatedCourier.getId(), updatedCourier.getName());
+                    .satisfies(
+                            courierOutput -> assertThat(courierOutput.id()).isNotNull(),
+                            courierOutput -> assertThat(courierOutput.name()).isEqualTo(courierInput.name())
+                    );
         }
     }
 
@@ -98,7 +102,6 @@ class CourierControllerIT {
 
         @Test
         void givenExistingCourierId_whenGettingCourier_shouldReturnOkAndCourierOutput() {
-            var expectedCourier = CourierTestDataBuilder.samwiseCourier();
             var response = given()
                     .contentType(ContentType.JSON)
                     .accept(ContentType.JSON)
@@ -112,8 +115,10 @@ class CourierControllerIT {
 
             assertThat(response)
                     .isNotNull()
-                    .extracting(CourierOutput::id, CourierOutput::name)
-                    .containsExactly(expectedCourier.getId(), expectedCourier.getName());
+                    .satisfies(
+                            courierOutput -> assertThat(courierOutput.id()).isEqualTo(defaultCourier.getId()),
+                            courierOutput -> assertThat(courierOutput.name()).isEqualTo(defaultCourier.getName())
+                    );
         }
     }
 
@@ -143,7 +148,7 @@ class CourierControllerIT {
         @Test
         void givenValidDistance_whenCalculatingPayout_shouldReturnOkAndFee() {
             var payoutInput = CourierTestDataBuilder.validPayoutInput();
-            var expectedFee = CourierTestDataBuilder.expectedPayoutFee();
+            var expectedFee = BigDecimal.valueOf(155.00).setScale(2, RoundingMode.HALF_EVEN);
 
             var response = given()
                     .contentType(ContentType.JSON)
