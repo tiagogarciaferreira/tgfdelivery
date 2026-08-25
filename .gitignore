@@ -14,8 +14,8 @@ services/delivery-tracking/build/**
 services/delivery-tracking/.gradle
 
 services/gateway/HELP.md
-services/gateway/target/**
-services/gateway/.mvn/wrapper/maven-wrapper.jar
+services/gateway/build/**
+services/gateway/.gradle
 
 services/service-registry/HELP.md
 services/service-registry/target/**
