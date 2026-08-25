@@ -6,8 +6,8 @@
 
 ### Project ###
 services/courier-management/HELP.md
-services/courier-management/target/**
-services/courier-management/.mvn/wrapper/maven-wrapper.jar
+services/courier-management/build/**
+services/courier-management/.gradle
 
 services/delivery-tracking/HELP.md
 services/delivery-tracking/build/**
