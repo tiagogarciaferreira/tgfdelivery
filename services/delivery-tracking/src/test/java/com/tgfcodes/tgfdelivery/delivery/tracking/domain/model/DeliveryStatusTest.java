@@ -17,7 +17,7 @@ class DeliveryStatusTest {
     @Nested
     class CanChangeTo {
         @ParameterizedTest
-        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.DeliveryStatusTest#validTransitions")
+        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.DeliveryStatusTest#validTransitions")
         void givenValidTransition_whenCheckingIfCanChange_shouldReturnTrue(DeliveryStatus currentStatus,
                                                                            DeliveryStatus targetStatus) {
             var result = currentStatus.canChangeTo(targetStatus);
@@ -25,7 +25,7 @@ class DeliveryStatusTest {
         }
 
         @ParameterizedTest
-        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.DeliveryStatusTest#invalidTransitions")
+        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.DeliveryStatusTest#invalidTransitions")
         void givenInvalidTransition_whenCheckingIfCanChange_shouldReturnFalse(DeliveryStatus currentStatus,
                                                                               DeliveryStatus targetStatus) {
             var result = currentStatus.canChangeTo(targetStatus);
@@ -36,7 +36,7 @@ class DeliveryStatusTest {
     @Nested
     class CanNotChangeTo {
         @ParameterizedTest
-        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.DeliveryStatusTest#invalidTransitions")
+        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.DeliveryStatusTest#invalidTransitions")
         void givenInvalidTransition_whenCheckingIfCanNotChange_shouldReturnTrue(DeliveryStatus currentStatus,
                                                                                 DeliveryStatus targetStatus) {
             var result = currentStatus.canNotChangeTo(targetStatus);
@@ -44,7 +44,7 @@ class DeliveryStatusTest {
         }
 
         @ParameterizedTest
-        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.DeliveryStatusTest#validTransitions")
+        @MethodSource("com.tgfcodes.tgfdelivery.delivery.tracking.domain.model.DeliveryStatusTest#validTransitions")
         void givenValidTransition_whenCheckingIfCanNotChange_shouldReturnFalse(DeliveryStatus currentStatus,
                                                                                DeliveryStatus targetStatus) {
             var result = currentStatus.canNotChangeTo(targetStatus);
