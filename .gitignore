@@ -18,5 +18,5 @@ services/gateway/build/**
 services/gateway/.gradle
 
 services/service-registry/HELP.md
-services/service-registry/target/**
-services/service-registry/.mvn/wrapper/maven-wrapper.jar
+services/service-registry/build/**
+services/service-registry/.gradle
