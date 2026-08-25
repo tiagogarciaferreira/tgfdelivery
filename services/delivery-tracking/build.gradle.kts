@@ -1,6 +1,8 @@
 import java.time.Instant
 
-extra.set("springCloudVersion", "2025.1.2")
+object Versions {
+    const val SPRING_CLOUD_VERSION = "2025.1.2"
+}
 
 plugins {
     java
@@ -59,8 +61,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        val springCloudVersion = extra["springCloudVersion"] as String
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${Versions.SPRING_CLOUD_VERSION}")
     }
     dependencies {
         dependency("org.apache.httpcomponents:httpclient:4.5.14")
