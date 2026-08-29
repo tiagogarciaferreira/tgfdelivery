@@ -4,15 +4,15 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: false
         format_sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/deliverydb
-    username: postgres
-    password: postgres
+    url: jdbc:${DATABASE_ENGINE}://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   mvc:
     apiversion:
       required: true
@@ -31,8 +31,9 @@ spring:
       datetime:
         write-date-keys-as-timestamps: false
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
@@ -43,7 +44,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER_URL}
   instance:
     instance-id: ${random.value}
     prefer-ip-address: true
@@ -77,4 +78,4 @@ resilience4j:
         waitDurationInOpenState: 5000
 
 server:
-  port: 8081
+  port: ${APP_SERVER_PORT}

@@ -8,4 +8,4 @@ eureka:
     fetchRegistry: false
 
 server:
-  port: 8761
+  port: ${APP_SERVER_PORT}

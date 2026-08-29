@@ -8,15 +8,23 @@
 services/courier-management/HELP.md
 services/courier-management/build/**
 services/courier-management/.gradle
+services/courier-management/.env.*
+!services/courier-management/.env.template
 
 services/delivery-tracking/HELP.md
 services/delivery-tracking/build/**
 services/delivery-tracking/.gradle
+services/delivery-tracking/.env.*
+!services/delivery-tracking/.env.template
 
 services/gateway/HELP.md
 services/gateway/build/**
 services/gateway/.gradle
+services/gateway/.env.*
+!services/gateway/.env.template
 
 services/service-registry/HELP.md
 services/service-registry/build/**
 services/service-registry/.gradle
+services/service-registry/.env.*
+!services/service-registry/.env.template

@@ -58,7 +58,7 @@ eureka:
     register-with-eureka: false
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER_URL}
 
 resilience4j:
   circuitbreaker:
@@ -76,4 +76,4 @@ resilience4j:
         waitDurationInOpenState: 5000
 
 server:
-  port: 9999
+  port: ${APP_SERVER_PORT}
