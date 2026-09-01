@@ -1,17 +1,13 @@
 services:
   postgres:
     extends:
-      file: ../docker-compose.yml
+      file: ../../docker-compose.yaml
       service: postgres
-    networks:
-      - delivery-network
 
   kafka:
     extends:
-      file: ../docker-compose.yml
+      file: ../../docker-compose.yaml
       service: kafka
-    networks:
-      - delivery-network
 
 volumes:
   postgres_data:
@@ -20,6 +16,6 @@ volumes:
     name: kafka_data
 
 networks:
-  delivery-network:
-    name: delivery-network
+  tgfdelivery-net:
+    name: tgfdelivery-net
     driver: bridge
